@@ -1,42 +1,51 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 export default function Home() {
+  const [isDark, setIsDark] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const router = useRouter();
+
+  const handleClick = () => {
+    setIsAnimating(true);
+    setTimeout(() => [router.push("/login")], 1000);
+  };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-50 dark:bg-gray-900">
-      {/* Title */}
-      <h1 className="text-3xl sm:text-4xl font-semibold text-gray-900 dark:text-white mb-8">
-        Project is starting
-      </h1>
+    <>
+      <div className="h-screen w-screen flex justify-center text-black bg-white dark:bg-gray-900 dark:text-white">
+        <div className="h-screen w-4/5 flex flex-col items-center justify-between pt-96 pb-16 ">
+          <div className="w-fit h-fit flex items-center flex-col gap-[5vh] ">
+            <h1
+              className={`text-[2em] transition-opacity duration-1000 ${
+                isAnimating ? "opacity-0" : ""
+              }`}
+            >
+              Niraj Clinic
+            </h1>
 
-      {/* Progress Section */}
-      <div className="w-full max-w-lg bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
-        <h2 className="text-xl font-medium text-gray-800 dark:text-gray-100 mb-4">
-          Project Setup Progress
-        </h2>
-        <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-4 mb-4">
-          <div
-            className="bg-blue-600 h-4 rounded-full"
-            style={{ width: '10%' }} // You can dynamically adjust progress percentage here
-          />
+            <Button
+              disabled={isAnimating}
+              className={`text-[1.6em] px-16 py-8 rounded-2xl transition-all duration-1000 ${
+                isAnimating ? "translate-y-24" : ""
+              }`}
+              onClick={handleClick}
+            >
+              {isAnimating ? (
+                <Loader2 className="animate-spin"></Loader2>
+              ) : (
+                "Get Started"
+              )}
+            </Button>
+
+          </div>
+          <footer>Copyright &copy; 2024</footer>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          10% complete. Continue setting up your project.
-        </p>
       </div>
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 mt-8">
-        <a
-          href="#"
-          className="px-6 py-2 text-sm bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
-        >
-          Continue Setup
-        </a>
-        <a
-          href="#"
-          className="px-6 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        >
-          Learn More
-        </a>
-      </div>
-    </div>
+    </>
   );
 }
