@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
+import supabase from "./helpers/supabase";
 
 const protectedRoutes = ['/home']
 
-const isAuthenticated: Boolean = false; 
 
-export default function middleware(req: NextRequest) {
+export default async function middleware(req: NextRequest) {
+    const{data: session} = await supabase.auth.getSession()
+
+    const isAuthenticated = !!session;
+
     if(!isAuthenticated && protectedRoutes.includes(req?.nextUrl?.pathname))
     {
         const absoluteUrl = new URL("/login", req.nextUrl.origin)

@@ -16,14 +16,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
+import supabase from "@/helpers/supabase";
+import { toast, Toaster } from "sonner";
 
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(5, {
-      message: "Enter a valid username",
-    })
-    .max(50),
+  email: z.string().min(1,{message:"This field cannot be empty."}).email({message: "Enter a valid email."}),
   password: z
     .string()
     .min(8, {
@@ -40,34 +37,51 @@ const LoginForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async(values: z.infer<typeof formSchema>) => {
+
+    setIsRedirecting(true)
+    
+    const{data,error} = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password
+    })
+
+    if(error)
+    {
+      toast.error("Error",{
+        description: error.message,
+      })
+      setIsRedirecting(false)
+    }
+    else
+      router.push('/home')
   };
 
-  const redirect=(address:string)=>{
+  const redirect=async(address:string)=>{
         setIsRedirecting(true)
         router.push(`/${address}`)
   }
 
   return (
     <>
+    <Toaster richColors/>
     <div className="flex flex-col gap-6">
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col items-center gap-[3vh]">
         <div className="flex flex-col gap-6 w-full">        
         <FormField
           control={form.control}
-          name="username"  
+          name="email"  
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-lg">Username</FormLabel>
+              <FormLabel className="text-lg">E-mail</FormLabel>
               <FormControl>
-                <Input placeholder="Username" {...field} />
+                <Input placeholder="Enter your mail" {...field} disabled={isRedirecting}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,7 +94,7 @@ const LoginForm = () => {
             <FormItem>
               <FormLabel className="text-lg">Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" type="password" {...field} />
+                <Input placeholder="Password" type="password" {...field} disabled={isRedirecting}/>
               </FormControl>
               <FormMessage />
             </FormItem>

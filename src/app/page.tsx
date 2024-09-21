@@ -19,7 +19,7 @@ export default function Home() {
   };
   return (
     <>
-      <div className="h-screen w-screen flex justify-center text-black bg-white dark:bg-gray-900 dark:text-white">
+      <div className="h-screen w-screen flex justify-center text-black bg-background dark:text-white">
         <div className="h-screen w-4/5 flex flex-col items-center justify-between pt-96 pb-16 ">
           <div className="w-fit h-fit flex items-center flex-col gap-[5vh]">
             <h1

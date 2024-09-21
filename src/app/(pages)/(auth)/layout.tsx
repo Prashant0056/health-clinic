@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 const LoginLayout=({children}:{children: ReactNode})=>{
     return(
         <>
-        <div className="relative bg-white dark:bg-gray-900 h-screen p-10">
+        <div className="relative bg-background h-screen p-10">
             <div className="w-full flex justify-end absolute top-16 right-12 z-50">
               <ThemeToggle />
             </div>
