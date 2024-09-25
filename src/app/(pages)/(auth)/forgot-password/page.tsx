@@ -1,6 +1,8 @@
 "use client"
 
-import ResetForm from "@/components/forgot-password/ResetForm";
+import ResetForm from "@/components/forgot-password/SendResetRequest";
+
+
 
 const ForgotPassword=()=>{
     return(

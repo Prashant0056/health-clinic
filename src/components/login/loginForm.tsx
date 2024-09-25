@@ -16,8 +16,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separator } from "../ui/separator";
-import supabase from "@/helpers/supabase";
+import createClient from "@/utils/supabase/client";
 import { toast, Toaster } from "sonner";
+
+const supabase = createClient()
 
 const formSchema = z.object({
   email: z.string().min(1,{message:"This field cannot be empty."}).email({message: "Enter a valid email."}),

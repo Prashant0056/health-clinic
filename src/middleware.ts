@@ -1,23 +1,12 @@
-import { NextRequest, NextResponse } from "next/server"
-import supabase from "./helpers/supabase";
+import { type NextRequest } from 'next/server'
+import { updateSession } from './utils/supabase/middleware' 
 
-const protectedRoutes = ['/home']
-
-
-export default async function middleware(req: NextRequest) {
-    const{data: session} = await supabase.auth.getSession()
-
-    const isAuthenticated = !!session;
-
-    if(!isAuthenticated && protectedRoutes.includes(req?.nextUrl?.pathname))
-    {
-        const absoluteUrl = new URL("/login", req.nextUrl.origin)
-        return NextResponse.redirect(absoluteUrl.toString())
-    }
-
-    return NextResponse.next();
+export async function middleware(request: NextRequest) {
+  return await updateSession(request)
 }
 
 export const config = {
-    matcher: ['/home'],
-};
+  matcher: [
+    '/home'
+  ],
+}

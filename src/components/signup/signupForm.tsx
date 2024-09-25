@@ -13,7 +13,9 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
-import supabase from "@/helpers/supabase";
+import createClient from "@/utils/supabase/client";
+
+const supabase = createClient()
 
 const passwordSchema = z.string()
 .min(8, { message: "Password must be at least 8 characters long." })
